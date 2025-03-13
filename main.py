@@ -1,32 +1,31 @@
 import streamlit as st
+import pandas as pd
 from src.preprocess import *
 from src.scraping_tools import *
 from src.shortage_checking import *
 
 st.head("Shortage Scraper")
 
-st.title("Payroll")
-col1, col2, col3, col4 = st.columns([0.15, 0.15, 0.15, 0.55])
+fda_data = scrape_data_from_fda()
+ashp_data = scrape_data_from_ashp()
 
-
-#UPLOAD FILES AND PRE-PROCESS THEM
-
-drug_data = st.file_uploader("Upload the payroll register file")
-
-def process_data(payroll, timelock, pay_period):
-  ndc_code_list, ndc_count_list = preprocess(drug_data)
-  fda_data = scrape_data_from_fda()
-  ashp_data = scrape_data_from_ashp()
-  fda_shortage = []
-  ashp_shortage = []
+def process_data(data):
+  ndc_code_list, ndc_count_list = preprocess(data)
+  fda_shortage_list = []
+  ashp_shortage_list = []
   for ndc_code in ndc_code_list:
-    fda_shortage.append(
-  
-  
+    fda_shortage = check_drug_shortage_fda(ndc_code, fda_data)
+    fda_shortage_list.append(fda_shortage)
+    ashp_shortage = check_drug_shortage_ashp(ndc_code, ashp_data)
+    ashp_shortage_list.append(ashp_shortage)
+    
+  updated_data = {"NDC_code": ndc_code_list, "NDC_count": ndc_count_list, "FDA_shortage": fda_shortage_list, "ASHP_shortage": ashp_shortage_list}
+  final_data = pd.DataFrame(updated_data)
+  return final_data
 #-----------------------------------------------------------------------------------------
 if drug_data:
 
-  run = st.button("Process files")
+  run = st.button("Process file")
 
   if "processed" not in st.session_state:
     st.session_state.processed = False
@@ -34,7 +33,7 @@ if drug_data:
   if run:
     st.session_state.processed = True
     
-    VTC_excel, VTE_excel = process_data(payroll=payroll_register, timelock=timelock, pay_period=pay_period)
+    final_data = process_data(drug_data)
     st.session_state.VTC = VTC_excel
     st.session_state.VTE = VTE_excel
 
