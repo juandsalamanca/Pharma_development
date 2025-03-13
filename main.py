@@ -1,4 +1,7 @@
 import streamlit as st
+from src.preprocess import *
+from src.scraping_tools import *
+from src.shortage_checking import *
 
 st.head("Shortage Scraper")
 
@@ -8,25 +11,17 @@ col1, col2, col3, col4 = st.columns([0.15, 0.15, 0.15, 0.55])
 
 #UPLOAD FILES AND PRE-PROCESS THEM
 
-payroll_register = st.file_uploader("Upload the payroll register file")
-
-timelock = st.file_uploader("Upload the timelock file")
-
+drug_data = st.file_uploader("Upload the payroll register file")
 
 def process_data(payroll, timelock, pay_period):
-  payroll, timelock, empl_trio = preprocess_files(payroll=payroll_register, timelock=timelock)
-  if old != None:
-    del empl_trio[old]
-  if new_payroll != None:
-    empl_trio[new_payroll] = [new_timelock, new_department]
-  # Produce the output files:
-  VTC, VTE = produce_payroll_output(payroll=payroll, time_file_path=timelock, empl_trio=empl_trio, pay_period=pay_period)
-  VTC_excel = VTC.to_csv(index = False).encode("utf-8")
-  VTE_excel = VTE.to_csv(index = False).encode("utf-8")
-  return VTC_excel, VTE_excel
+  ndc_code_list, ndc_count_list = preprocess(drug_data)
+  fda_data = scrape_data_from_fda()
+  ashp_data = scrape_data_from_ashp()
+  
+  
   
 #-----------------------------------------------------------------------------------------
-if payroll_register and timelock:
+if drug_data:
 
   run = st.button("Process files")
 
