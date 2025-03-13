@@ -17,7 +17,10 @@ def process_data(payroll, timelock, pay_period):
   ndc_code_list, ndc_count_list = preprocess(drug_data)
   fda_data = scrape_data_from_fda()
   ashp_data = scrape_data_from_ashp()
-  
+  fda_shortage = []
+  ashp_shortage = []
+  for ndc_code in ndc_code_list:
+    fda_shortage.append(
   
   
 #-----------------------------------------------------------------------------------------
