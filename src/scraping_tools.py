@@ -21,7 +21,7 @@ def get_product_name_from_fda_api(ndc):
   else:
       print(f"Failed to fetch data: {response.status_code} - {response.text}")
 
-def scrape_data_from_ashp()
+def scrape_data_from_ashp():
   
   # URL of the page with the table
   url = "https://www.ashp.org/drug-shortages/current-shortages/drug-shortages-list?page=CurrentShortages"
