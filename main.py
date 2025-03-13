@@ -23,8 +23,9 @@ def process_data(data):
     ashp_shortage_list.append(ashp_shortage)
     
   updated_data = {"NDC_code": ndc_code_list, "NDC_count": ndc_count_list, "FDA_shortage": fda_shortage_list, "ASHP_shortage": ashp_shortage_list}
-  final_data = pd.DataFrame(updated_data)
-  return final_data
+  ndc_df = pd.DataFrame(updated_data)
+  ndc_csv = ndc_df.to_csv(index = False).encode("utf-8")
+  return ndc_csv
 
 
 #-----------------------------------------------------------------------------------------
