@@ -49,6 +49,8 @@ def scrape_data_from_ashp()
 
 def scrape_data_from_fda():
 
+  # === 1. Initiate the session for the scraping ===
+
   main_page_url = "https://dps.fda.gov/drugshortages"
   
   session = requests.Session()
@@ -124,5 +126,7 @@ def scrape_data_from_fda():
   
   download_url = "https://dps.fda.gov/api/data"
   response = requests.post(download_url, headers=headers, cookies=cookies, json=data)
-  
-  return response.json()["data"]
+  df = pd.json_normalize(response.json()["data"])
+  essential_df = df[["avail_and_esti_short_dur", "package_ndc_code"]]
+
+  return essential_df
