@@ -5,7 +5,7 @@ from src.scraping_tools import *
 from src.shortage_checking import *
 from src.google_scraping import *
 
-st.head("Shortage Scraper")
+st.header("Shortage Scraper")
 
 if "fda_data" not in st.session_state:
   st.session_state.fda_data_df = scrape_data_from_fda()
