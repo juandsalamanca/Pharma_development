@@ -127,6 +127,6 @@ def scrape_data_from_fda():
   download_url = "https://dps.fda.gov/api/data"
   response = requests.post(download_url, headers=headers, cookies=cookies, json=data)
   df = pd.json_normalize(response.json()["data"])
-  essential_df = df[["avail_and_esti_short_dur", "package_ndc_code"]]
+  essential_df = df[["avail_and_esti_short_dur", "package_ndc_code", "date_of_update"]]
 
   return essential_df
