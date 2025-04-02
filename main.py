@@ -3,14 +3,12 @@ import pandas as pd
 from src.preprocess import *
 from src.scraping_tools import *
 from src.shortage_checking import *
+from src.google_scraping import *
 
 st.head("Shortage Scraper")
 
 if "fda_data" not in st.session_state:
-  st.session_state.fda_data = scrape_data_from_fda()
-
-if "ashp_data" not in st.session_state:
-  st.session_state.ashp_data = scrape_data_from_ashp()
+  st.session_state.fda_data_df = scrape_data_from_fda()
 
 def get_shortage_info(ndc_code_list):
   real_ndc_code_list = []
@@ -23,7 +21,7 @@ def get_shortage_info(ndc_code_list):
   no_match_codes = []
   error_codes = []
   google_search_uses = 0
-
+  fda_ndc_package_code_shortage_list = st.session_state.fda_data_df["package_ndc_code"].to_list()
   for i, ndc_code in enumerate(ndc_code_list):
     try:
       data = fix_ndc_codes(ndc_code)
@@ -37,7 +35,7 @@ def get_shortage_info(ndc_code_list):
       brand_name_list.append(brand_name)
 
       # Check shortages:
-      fda_shortage, date_of_update = check_drug_shortage_fda(real_ndc_code)
+      fda_shortage, date_of_update = check_drug_shortage_fda(real_ndc_code, fda_ndc_package_code_shortage_list)
       fda_shortage_list.append(fda_shortage)
       fda_date_list.append(date_of_update)
 
