@@ -70,8 +70,25 @@ def get_shortage_info(ndc_code_list):
 
   return real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes
 
-
+def process_data(data):
+  colin_df, ndc_code_list = preprocess(data)
+  shortage_data = get_shortage_info(ndc_code_list)
+  real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes = shortage_data
+  new_data_df = pd.DataFrame({"New_NDC_code":real_ndc_code_list, 
+                              "FDA_shortage":fda_shortage_list, 
+                              "ASHP-shortage":ashp_shortage_list, 
+                              "Generic_name": generic_name_list, 
+                              "Brand_name":brand_name_list, 
+                              "FDA_Update":fda_date_list, 
+                              "ASHP_Update":ashp_date_list})
+  final_df = pd.concat((colin_df[["Date", "NDC", "QTY", "Price"]], new_data_df), axis=1)
+  return final_df
+  
 #-----------------------------------------------------------------------------------------
+
+
+drug_data = st.file_uploader("Upload your file")
+
 if drug_data:
 
   run = st.button("Process file")
