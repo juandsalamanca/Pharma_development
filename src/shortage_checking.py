@@ -1,6 +1,6 @@
 from src.scraping_tools import get_product_name_from_fda_api
 
-def check_drug_shortage_fda(ndc):
+def check_drug_shortage_fda(ndc, fda_ndc_package_code_shortage_list):
   shortage = False
   date = None
   if ndc in fda_ndc_package_code_shortage_list:
