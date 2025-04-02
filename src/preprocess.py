@@ -15,7 +15,7 @@ def get_manufacturer_and_product_codes(text):
 
 def fix_ndc_codes(ndc):
   codes = get_manufacturer_and_product_codes(ndc)
-  name = get_product_name(ndc)
+  name = get_product_name_from_fda_api(ndc)
   time.sleep(2)
   if name:
     ndc_code = ndc
