@@ -22,6 +22,11 @@ def get_shortage_info(ndc_code_list):
   error_codes = []
   google_search_uses = 0
   fda_ndc_package_code_shortage_list = st.session_state.fda_data_df["package_ndc_code"].to_list()
+
+  progress_text = "Finding shortage information. Please wait."
+  percent_complete = 0
+  my_bar = st.progress(percent_complete, text=progress_text)
+  delta = 100/len(ndc_code_list)
   for i, ndc_code in enumerate(ndc_code_list):
     try:
       data = fix_ndc_codes(ndc_code)
@@ -67,6 +72,9 @@ def get_shortage_info(ndc_code_list):
       ashp_date_list.append(None)
 
     generic_name_list.append(generic_name)
+    percent_complete += delta
+    progress_text = f"Processed {i} samples"
+    my_bar.progress(percent_complete + 1, text=progress_text)
 
   return real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes
 
