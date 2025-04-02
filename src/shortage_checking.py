@@ -1,12 +1,15 @@
 from src.scraping_tools import get_product_name_from_fda_api
 
-def check_drug_shortage_fda(ndc, essential_df):
-  ndc_list = essential_df["package_ndc_code"].to_list()
-  if ndc in ndc_list:
-    idx = ndc_list.index(ndc)
+def check_drug_shortage_fda(ndc):
+  shortage = False
+  date = None
+  if ndc in fda_ndc_package_code_shortage_list:
+    idx = fda_ndc_package_code_shortage_list.index(ndc)
+    date = essential_df.loc[idx, "date_of_update"]
     if essential_df.loc[idx, "avail_and_esti_short_dur"] == "Unavailable":
-      return True
-  return False
+      shortage = True
+
+  return shortage, date
 
 def check_drug_shortage_ashp(ndcm, df):
 
