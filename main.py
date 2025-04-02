@@ -82,7 +82,8 @@ def process_data(data):
                               "FDA_Update":fda_date_list, 
                               "ASHP_Update":ashp_date_list})
   final_df = pd.concat((colin_df[["Date", "NDC", "QTY", "Price"]], new_data_df), axis=1)
-  return final_df
+  shortage_info = final_df.to_csv(index = False).encode("utf-8")
+  return shortage_info
   
 #-----------------------------------------------------------------------------------------
 
@@ -99,13 +100,12 @@ if drug_data:
   if run:
     st.session_state.processed = True
     
-    final_data = process_data(drug_data)
-    st.session_state.final_data = final_data
+    st.session_state.final_data = process_data(drug_data)
 
   if st.session_state.processed == True:
   
     st.download_button(
-        label="Download the VTC_output",
+        label="Download the output file",
         data=st.session_state.final_data,
         file_name="Updated_shortage_data.csv",
         mime="text/csv",
