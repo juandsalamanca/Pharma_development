@@ -6,3 +6,4 @@ openpyxl
 requests>=2.25.0
 urllib3>=1.26.0
 python-dateutil>=2.8.2
+beautifulsoup4>=4.9.3
