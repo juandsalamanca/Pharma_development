@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil import parser
+import streamlit as st
 
 def format_date(date_string):
     try:
@@ -36,6 +37,9 @@ def get_ashp_urls(ndc):
     """
     Uses Google Custom Search API to find the URL with info from the NDC.
     """
+
+    API_KEY = st.secrets["CSE_API_KEY"]
+    CX = st.secrets["CSE_CX"]
     subquery = "NDC "+ ndc + " ASHP"
     query = f"{subquery} site:https://www.ashp.org/drug-shortages/current-shortages"
     url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
