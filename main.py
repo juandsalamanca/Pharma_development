@@ -7,7 +7,15 @@ from src.google_scraping import *
 
 st.header("Shortage Scraper")
 
+reset = st.button("Reset") 
+if reset:
+  st.session_state.fda_data_df = None
+  st.session_state.processed = False
+  st.session_state.final_data
+
 if "fda_data" not in st.session_state:
+  st.session_state.fda_data_df = scrape_data_from_fda()
+elif st.session_state.fda_data_df == None:
   st.session_state.fda_data_df = scrape_data_from_fda()
 
 def get_shortage_info(ndc_code_list):
@@ -106,9 +114,9 @@ if drug_data:
     st.session_state.processed = False
     
   if run:
-    st.session_state.processed = True
-    
+
     st.session_state.final_data = process_data(drug_data)
+    st.session_state.processed = True
 
   if st.session_state.processed == True:
   
