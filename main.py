@@ -82,7 +82,7 @@ def get_shortage_info(ndc_code_list):
     generic_name_list.append(generic_name)
     percent_complete += delta
     progress_text = f"Processed {i} samples"
-    my_bar.progress(percent_complete + 1, text=progress_text)
+    my_bar.progress(percent_complete, text=progress_text)
 
   return real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes
 
