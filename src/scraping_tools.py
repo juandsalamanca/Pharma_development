@@ -1,25 +1,31 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from src.preprocess import get_manufacturer_and_product_codes
 
 def get_product_name_from_fda_api(ndc):
-  FOO, BAR = get_manufacturer_and_product_codes(ndc)
+  FOO, BAR, PAC = get_manufacturer_and_product_codes(ndc)
+  session = requests.Session()
+  retries = Retry(
+        total=5,  # Maximum retries
+        backoff_factor=2,  # Wait: 2s, 4s, 8s, etc.
+        status_forcelist=[500, 502, 503, 504],  # Retry on server errors
+        raise_on_status=False
+    )
+  session.mount("https://", HTTPAdapter(max_retries=retries))
   endpoint = f'https://api.fda.gov/drug/ndc.json?search=product_ndc:"{FOO}-{BAR}"'
-  response = requests.get(endpoint)
+  response = session.get(endpoint, timeout=20)
   if response.status_code == 200:
     data = response.json()
     if "results" in data:
-        for result in data["results"]:
-            brand_name = result.get('brand_name')
-            generic_name = result.get('generic_name')
+      for result in data["results"]:
+        brand_name = result.get('brand_name')
+        generic_name = result.get('generic_name')
 
-        return brand_name, generic_name
+      return generic_name, brand_name
 
-    else:
-        print("No results found for the given NDC code.")
-  else:
-      print(f"Failed to fetch data: {response.status_code} - {response.text}")
 
 def scrape_data_from_ashp():
   
