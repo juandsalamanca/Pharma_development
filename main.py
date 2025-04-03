@@ -91,6 +91,13 @@ def process_data(data):
   colin_df, ndc_code_list = preprocess(data)
   shortage_data = get_shortage_info(ndc_code_list)
   real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes = shortage_data
+  print(len(real_ndc_code_list))
+  print(len(fda_shortage_list))
+  print(len(ashp_shortage_list))
+  print(len(generic_name_list))
+  print(len(brand_name_list))
+  print(len(fda_date_list))
+  print(len(ashp_date_list))
   new_data_df = pd.DataFrame({"New_NDC_code":real_ndc_code_list, 
                               "FDA_shortage":fda_shortage_list, 
                               "ASHP-shortage":ashp_shortage_list, 
