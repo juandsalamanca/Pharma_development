@@ -1,6 +1,7 @@
 from datetime import datetime
 from dateutil import parser
 import streamlit as st
+import requests
 
 def format_date(date_string):
     try:
