@@ -6,7 +6,7 @@ from src.scraping_tools import *
 from src.shortage_checking import *
 from src.google_scraping import *
 
-st.header("Shortage Scraper")
+st.header("Shortage Scrape")
 
 reset = st.button("Reset") 
 if reset:
