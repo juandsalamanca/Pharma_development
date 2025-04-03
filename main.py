@@ -76,6 +76,7 @@ def get_shortage_info(ndc_code_list):
       time.sleep(1)
 
     except Exception as e:
+      print(f"Error with ASHP data: {str(e)}")
       error_codes.append([ndc_code, str(e)])
       ashp_shortage_list.append(None)
       ashp_date_list.append(None)
