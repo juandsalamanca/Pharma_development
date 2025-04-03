@@ -20,7 +20,7 @@ if "fda_data" not in st.session_state:
 elif st.session_state.fda_data_df == None:
   st.session_state.fda_data_df = scrape_data_from_fda()
 
-print(f"Length of fda data: {len(st.session_state.fda_data_df)}")
+st.write(f"Length of fda data: {len(st.session_state.fda_data_df)}")
 
 def get_shortage_info(ndc_code_list):
   real_ndc_code_list = []
