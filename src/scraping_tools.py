@@ -25,7 +25,29 @@ def get_product_name_from_fda_api(ndc):
         generic_name = result.get('generic_name')
 
       return generic_name, brand_name
-
+      
+def fix_ndc_codes(ndc):
+  codes = get_manufacturer_and_product_codes(ndc)
+  name = get_product_name_from_fda_api(ndc)
+  time.sleep(2)
+  if name:
+    ndc_code = ndc
+    brand_name, generic_name = name
+    return ndc_code, generic_name, brand_name
+  for i, code in enumerate(codes):
+    if code[0] == "0":
+      new_code = code[1:]
+      if i == 0:
+        ndc_code = new_code +"-"+codes[1]+"-"+codes[2]
+      elif i == 1:
+        ndc_code = codes[0] +"-"+new_code+"-"+codes[2]
+      else:
+        ndc_code = codes[0] +"-" + codes[1] +"-" + new_code
+      name = get_product_name_from_fda_api(ndc_code)
+      time.sleep(2)
+      if name:
+        generic_name, brand_name = name
+        return ndc_code, generic_name, brand_name
 
 def scrape_data_from_ashp():
   
