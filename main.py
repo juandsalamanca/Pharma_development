@@ -12,6 +12,7 @@ if reset:
   st.session_state.fda_data_df = None
   st.session_state.processed = False
   st.session_state.final_data
+  drug_data = None
 
 if "fda_data" not in st.session_state:
   st.session_state.fda_data_df = scrape_data_from_fda()
