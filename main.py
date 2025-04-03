@@ -32,9 +32,9 @@ def get_shortage_info(ndc_code_list):
   fda_ndc_package_code_shortage_list = st.session_state.fda_data_df["package_ndc_code"].to_list()
 
   progress_text = "Finding shortage information. Please wait."
-  percent_complete = 0
+  percent_complete = 0.0
   my_bar = st.progress(percent_complete, text=progress_text)
-  delta = 100/len(ndc_code_list)
+  delta = 1/len(ndc_code_list)
   for i, ndc_code in enumerate(ndc_code_list):
     try:
       data = fix_ndc_codes(ndc_code)
