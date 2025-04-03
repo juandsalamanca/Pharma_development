@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 from src.preprocess import *
 from src.scraping_tools import *
 from src.shortage_checking import *
