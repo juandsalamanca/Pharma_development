@@ -22,6 +22,8 @@ elif st.session_state.fda_data_df == None:
 
 st.write(f"Length of fda data: {len(st.session_state.fda_data_df)}")
 
+st.write({st.session_state.fda_data_df.head())
+
 def get_shortage_info(ndc_code_list):
   real_ndc_code_list = []
   generic_name_list = []
