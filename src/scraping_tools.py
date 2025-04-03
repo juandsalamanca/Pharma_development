@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import time
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from src.preprocess import get_manufacturer_and_product_codes
