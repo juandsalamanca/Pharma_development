@@ -40,9 +40,8 @@ def get_shortage_info(ndc_code_list):
   for i, ndc_code in enumerate(ndc_code_list):
     try:
       data = fix_ndc_codes(ndc_code)
-      st.write("FDA match data: ", data)
     except Exception as e:
-      st.write("Error with getting new ndc codes and names: ", str(e))
+      print("Error with getting new ndc codes and names: ", str(e))
       data = None
     generic_name = None
     if data:
