@@ -32,7 +32,6 @@ def get_shortage_info(ndc_code_list):
   error_codes = []
   google_search_uses = 0
   fda_ndc_package_code_shortage_list = st.session_state.fda_data_df["package_ndc_code"].to_list()
-
   progress_text = "Finding shortage information. Please wait."
   percent_complete = 0.0
   my_bar = st.progress(percent_complete, text=progress_text)
@@ -50,7 +49,7 @@ def get_shortage_info(ndc_code_list):
       brand_name_list.append(brand_name)
 
       # Check shortages:
-      fda_shortage, date_of_update = check_drug_shortage_fda(real_ndc_code, fda_ndc_package_code_shortage_list)
+      fda_shortage, date_of_update = check_drug_shortage_fda(real_ndc_code, st.session_state.fda_data_df, fda_ndc_package_code_shortage_list)
       fda_shortage_list.append(fda_shortage)
       fda_date_list.append(date_of_update)
 
@@ -84,7 +83,7 @@ def get_shortage_info(ndc_code_list):
 
     generic_name_list.append(generic_name)
     percent_complete += delta
-    progress_text = f"Processed {i} samples"
+    progress_text = f"Processed {i+1} samples"
     my_bar.progress(percent_complete, text=progress_text)
 
   return real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes
@@ -93,13 +92,6 @@ def process_data(data):
   colin_df, ndc_code_list = preprocess(data)
   shortage_data = get_shortage_info(ndc_code_list)
   real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes = shortage_data
-  print(len(real_ndc_code_list))
-  print(len(fda_shortage_list))
-  print(len(ashp_shortage_list))
-  print(len(generic_name_list))
-  print(len(brand_name_list))
-  print(len(fda_date_list))
-  print(len(ashp_date_list))
   new_data_df = pd.DataFrame({"New_NDC_code":real_ndc_code_list, 
                               "FDA_shortage":fda_shortage_list, 
                               "ASHP-shortage":ashp_shortage_list, 
