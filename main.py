@@ -44,7 +44,7 @@ def get_shortage_info(ndc_code_list):
     try:
       data = fix_ndc_codes(ndc_code)
     except Exception as e:
-      print("Error with getting new ndc codes and names: ", str(e)
+      print("Error with getting new ndc codes and names: ", str(e))
       data = None
     generic_name = None
     if data:
