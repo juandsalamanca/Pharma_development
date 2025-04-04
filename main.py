@@ -28,6 +28,7 @@ def get_shortage_info(ndc_code_list):
   ashp_shortage_list = []
   fda_shortage_list = []
   fda_date_list = []
+  fda_availability = []
   ashp_date_list = []
   no_match_codes = []
   error_codes = []
@@ -51,9 +52,10 @@ def get_shortage_info(ndc_code_list):
       brand_name_list.append(brand_name)
 
       # Check shortages:
-      fda_shortage, date_of_update = check_drug_shortage_fda(real_ndc_code, st.session_state.fda_data_df, fda_ndc_package_code_shortage_list)
+      fda_shortage, date_of_update, availability = check_drug_shortage_fda(real_ndc_code, st.session_state.fda_data_df, fda_ndc_package_code_shortage_list)
       fda_shortage_list.append(fda_shortage)
       fda_date_list.append(date_of_update)
+      fda_availability.append(availability)
 
     # If there's no data matched with the FDA API we use google search
     else:
@@ -63,6 +65,7 @@ def get_shortage_info(ndc_code_list):
       brand_name_list.append(None)
       fda_shortage_list.append(None)
       fda_date_list.append(None)
+      fda_availability.append(None)
 
     try:
       ashp_data = get_ashp_info_with_custom_search_engine(ndc_code, 3)
