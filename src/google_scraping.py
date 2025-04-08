@@ -2,6 +2,27 @@ from datetime import datetime
 from dateutil import parser
 import streamlit as st
 import requests
+import re
+
+def extract_dates(text):
+
+    # Regular expression pattern for dates in format number(s)/number(s)/number(s)
+    date_pattern = r'\b\d+/\d+/\d+\b'
+    
+    # Find all matches of the pattern in the text
+    dates = re.findall(date_pattern, text)
+    
+    return dates
+
+
+def get_date_from_ashp_link(text):
+
+  if "<!-- Begin Revision Date -->" in text:
+    begin_date_section_idx = text.index("<!-- Begin Revision Date -->")
+    end_date_section_idx = text.index("<!-- End Revision Date -->")
+    date = extract_dates(text[begin_date_section_idx:end_date_section_idx])[0]
+    return date
+
 
 def format_date(date_string):
     try:
@@ -76,13 +97,20 @@ def get_ashp_info_with_custom_search_engine(ndc, num_results):
 
     for url in target_urls:
       response = requests.get(url)
-      date = response.headers["Date"]
-      text_list.append(response.text)
-      formatted_date = format_date(date)
-      date_list.append(formatted_date)
+      try:
+        date = get_date_from_ashp_link(response.text)
+        text_list.append(response.text)
+        formatted_date = format_date(date)
+        date_list.append(formatted_date)
+      except Exception as e:
+        print(e)
+
     most_recent_date_idx = get_most_recent_date_index(date_list)
-    text = text_list[most_recent_date_idx]
-    ndc_indexes = find_all_indexes(text, ndc)
+    if most_recent_date_idx != None:
+      text = text_list[most_recent_date_idx]
+      ndc_indexes = find_all_indexes(text, ndc)
+    else:
+      ndc_indexes = None
     # If we find the NDC code in the most recent ashp link we check it's shortage status
     if ndc_indexes:
       #print("Found NDC!")
