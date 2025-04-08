@@ -12,7 +12,7 @@ reset = st.button("Reset")
 if reset:
   st.session_state.fda_data_df = None
   st.session_state.processed = False
-  st.session_state.final_data
+  st.session_state.final_data = None
   drug_data = None
 
 if "fda_data" not in st.session_state:
