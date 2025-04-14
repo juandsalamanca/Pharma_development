@@ -84,6 +84,7 @@ def get_ashp_urls(ndc):
         print(f"[-] Error fetching LinkedIn URL: {e}")
         return None
 
+@st.cache_data(show_spinner=False)
 def get_ashp_info_with_custom_search_engine(ndc, num_results):
   shortage = None
   name = None
