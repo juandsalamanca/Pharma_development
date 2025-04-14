@@ -23,22 +23,12 @@ elif st.session_state.fda_data_df == None:
 
 import psutil
 
-def get_ram_usage():
-  # Get memory info
-  memory = psutil.virtual_memory()
-  
-  # Calculate usage in different formats
-  total_ram_gb = memory.total / (1024**3)  # Convert bytes to GB
-  used_ram_gb = memory.used / (1024**3)
-  available_ram_gb = memory.available / (1024**3)
-  percent_used = memory.percent
-  
-  print(f"Total RAM: {total_ram_gb:.2f} GB")
-  print(f"Used RAM: {used_ram_gb:.2f} GB")
-  print(f"Available RAM: {available_ram_gb:.2f} GB")
-  print(f"Percent used: {percent_used}%")
-  
-  return {"total":total_ram_gb, "used": used_ram_gb, "available": available_ram_gb, "percent": percent_used}
+def get_process_ram_usage():
+    import os, psutil
+    process = psutil.Process(os.getpid())
+    mem_mb = process.memory_info().rss / 1024 ** 2
+    print(f"[{i}] Process RAM: {mem_mb:.2f} MB")
+    return mem_mb
 
 def get_shortage_info(ndc_code_list):
   real_ndc_code_list = []
