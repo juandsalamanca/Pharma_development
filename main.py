@@ -21,6 +21,25 @@ elif st.session_state.fda_data_df == None:
   st.session_state.fda_data_df = scrape_data_from_fda()
 
 
+import psutil
+
+def get_ram_usage():
+  # Get memory info
+  memory = psutil.virtual_memory()
+  
+  # Calculate usage in different formats
+  total_ram_gb = memory.total / (1024**3)  # Convert bytes to GB
+  used_ram_gb = memory.used / (1024**3)
+  available_ram_gb = memory.available / (1024**3)
+  percent_used = memory.percent
+  
+  print(f"Total RAM: {total_ram_gb:.2f} GB")
+  print(f"Used RAM: {used_ram_gb:.2f} GB")
+  print(f"Available RAM: {available_ram_gb:.2f} GB")
+  print(f"Percent used: {percent_used}%")
+  
+  return {"total":total_ram_gb, "used": used_ram_gb, "available": available_ram_gb, "percent": percent_used}
+
 def get_shortage_info(ndc_code_list):
   real_ndc_code_list = []
   generic_name_list = []
@@ -39,6 +58,7 @@ def get_shortage_info(ndc_code_list):
   my_bar = st.progress(percent_complete, text=progress_text)
   delta = 1/len(ndc_code_list)
   for i, ndc_code in enumerate(ndc_code_list):
+    ram = get_ram_usage()
     try:
       data = fix_ndc_codes(ndc_code)
     except Exception as e:
@@ -88,7 +108,7 @@ def get_shortage_info(ndc_code_list):
 
     generic_name_list.append(generic_name)
     percent_complete += delta
-    progress_text = f"Processed {i+1} samples"
+    progress_text = f"Processed {i+1} samples, total RAM: {ram['total']}, used RAM: {ram['used']}"
     my_bar.progress(percent_complete, text=progress_text)
 
   return real_ndc_code_list, generic_name_list, brand_name_list, ashp_shortage_list, fda_shortage_list, fda_date_list, ashp_date_list, error_codes
